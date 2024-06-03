@@ -63,7 +63,7 @@ class Funcs():
         self.input_nome.delete(0, tk.END)
         self.input_cidade.delete(0, tk.END)
     def conecta_bd(self):
-        self.conn = sql.connect(r"C:\Users\20221CECA0402\Documents\Projeto_WRL\Aplicativo_WRL\clientes.db")
+        self.conn = sql.connect(r"C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\clientes.db")
         self.cursor = self.conn.cursor(); print("Conectando ao banco de dados")
     def desconecta_bd(self):
         self.conn.close(); print("Desconectando do banco de dados")

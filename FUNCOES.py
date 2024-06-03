@@ -19,23 +19,27 @@ import sqlite3 as sql
 class DepthCamera:
 
     def __init__(self):
-        # Configure depth and color streams
-        self.pipeline = rs.pipeline()
-        config = rs.config()
-        # Get device product line for setting a supporting resolution
-        pipeline_wrapper = rs.pipeline_wrapper(self.pipeline)
-        pipeline_profile = config.resolve(pipeline_wrapper)
-        device = pipeline_profile.get_device()
-        device.query_sensors()[0].set_option(rs.option.laser_power, 15)
-        device_product_line = str(device.get_info(rs.camera_info.product_line))
+        try:
+            # Configure depth and color streams
+            self.pipeline = rs.pipeline()
+            config = rs.config()
+            # Get device product line for setting a supporting resolution
+            pipeline_wrapper = rs.pipeline_wrapper(self.pipeline)
+            pipeline_profile = config.resolve(pipeline_wrapper)
+            device = pipeline_profile.get_device()
+            device.query_sensors()[0].set_option(rs.option.laser_power, 15)
+            device_product_line = str(device.get_info(rs.camera_info.product_line))
 
-        config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
-        config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
-        config.enable_stream(rs.stream.infrared, 1, 640, 480, rs.format.y8, 30)
+            config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
+            config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
+            config.enable_stream(rs.stream.infrared, 1, 640, 480, rs.format.y8, 30)
 
-            
-        # Start streaming
-        self.pipeline.start(config)
+                
+            # Start streaming
+            self.pipeline.start(config)
+
+        except:
+            print("Câmera desconectada")
 
     def get_frame(self):      
         frames = self.pipeline.wait_for_frames(timeout_ms=2000)
@@ -108,12 +112,12 @@ def tirar_foto(color_frame, infra_image, id_bico):
     data = datetime.now()
     lista_arq = []
     # Formatar a data e hora como parte do nome do arquivo
-    diretorio_destino_imgBW = r'C:\Users\20221CECA0402\Documents\Projeto_WRL\Aplicativo_WRL\fotos_BW'
-    nome_arquivo_BW = data.strftime(f'analise_{id_bico}_%d-%m-%Y_%H.%M') + '.png'
+    diretorio_destino_imgBW = r'C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\fotos_BW'
+    nome_arquivo_BW = data.strftime(f'registro_{id_bico}_%d-%m-%Y_%H.%M') + '.png'
     caminho_completo_fotografia_BW = os.path.join(diretorio_destino_imgBW, nome_arquivo_BW)
     
     # Formatar a data e hora como parte do nome do arquivo
-    diretorio_destino_imgAPP = r'C:\Users\20221CECA0402\Documents\Projeto_WRL\Aplicativo_WRL\fotos_app'
+    diretorio_destino_imgAPP = r'C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\fotos_app'
     nome_arquivo_APP = data.strftime(f'registro_{id_bico}_%d-%m-%Y_%H.%M') + '.png'
     caminho_completo_fotografia_APP = os.path.join(diretorio_destino_imgAPP, nome_arquivo_APP)
     lista_arq.append(nome_arquivo_APP)
@@ -135,7 +139,7 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
     imagem_bgr = cv2.cvtColor(imagem, cv2.COLOR_RGB2BGR)  # Converter imagem para BGR
 
     # Análise
-    results = model(imagem_bgr,device = 'cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True, project =r"C:\Users\20221CECA0402\Documents\Projeto_WRL\Aplicativo_WRL\resultados",name = nome, save_txt = True, show_boxes=False)
+    results = model(imagem_bgr,device = 'cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True, project =r"C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\resultados",name = nome, save_txt = True, show_boxes=False)
     
     for result in results:
         img_segmentada = results[0].plot(masks= True, boxes=False) #plotar a segmentação - *resultados_array_bgr
@@ -241,7 +245,7 @@ def extrair_dados(resultado, mascaras, nome):
 
     return caixas_detectadas, nomes_classes, lista_proprs
 
-def identificar_furos(caixas_detectadas, nomes_classes, imagem, frame):
+def identificar_furos(caixas_detectadas, nomes_classes, imagem, frame, nome_arquivo_APP):
     # Extrair as coordenadas e centro das caixas delimitadoras
     coordenadas_caixas = []
     pontos = []
@@ -266,10 +270,10 @@ def identificar_furos(caixas_detectadas, nomes_classes, imagem, frame):
     for i in range(1, len(pontos)):
         imagem_final = cv2.putText(img, f'{i}', pontos[i], cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 1)
 
-    data = datetime.now()
-    diretorio_guias = r'C:\Users\20221CECA0402\Documents\Projeto_WRL\Aplicativo_WRL\guias'
-    nome_arquivo = data.strftime('registro_%d-%m-%Y_%H.%M') + '.png'
-    caminho = os.path.join(diretorio_guias, nome_arquivo)
+    #id = str(id_bico)
+    #data = datetime.now()
+    diretorio_guias = r'C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\guias'
+    caminho = os.path.join(diretorio_guias, nome_arquivo_APP)
     
     cv2.imwrite(caminho, imagem_final)
 
@@ -309,7 +313,7 @@ def reunir_dados(dados_app, dados_arquivo, dados_diametros):
     # Inserir os dados vindos do app
     for dado in dados_app:
         lista_completa.append(dado)
-    # Inserir os dados vindos do app
+    # Inserir os dados do arquivo
     for dado in dados_arquivo:
         lista_completa.append(dado)
     # Inserir os dados dos diametros
@@ -329,7 +333,7 @@ def organizar_dados_app(lista):
 
 def salvar_registros(lista, x):
     # Conectando ao banco 
-    banco = sql.connect(r'C:\Users\20221CECA0402\Documents\Projeto_WRL\Aplicativo_WRL\REGISTROS_WRL.db') #mudar dps
+    banco = sql.connect(r'C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\REGISTROS_WRL.db') #mudar dps
     cursor = banco.cursor()
 
     if x == 6:

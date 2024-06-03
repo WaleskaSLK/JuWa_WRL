@@ -12,7 +12,7 @@ Grupo, SIte e BOF. Sendo assim, nesta aba, o Grupo, site e bof estão com seu ID
 Registros estarão vindo do banco de dados.
 """
 
-pasta = r'C:\Users\20221CECA0402\Documents'
+# pasta = r'C:\Users\20221CECA0402\Documents'
 # {=======================Comando para o Banco de Dados=========================}
 
 def selecao(inp_ID, inp_tipo): # {=========Leitura Grupo, SIte, BOF e ID(FRAME 1)=========}
@@ -21,7 +21,7 @@ def selecao(inp_ID, inp_tipo): # {=========Leitura Grupo, SIte, BOF e ID(FRAME 1
     inp_ID = int(inp_ID)
     ID = inp_ID
     
-    conn, cursor = fun.CONECTA_BD(r"C:\Users\20221CECA0402\Documents\Projeto_WRL\BD_WRL\REGISTROS_WRL.db")
+    conn, cursor = fun.CONECTA_BD(r"C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\REGISTROS_WRL.db")
     comando = f"SELECT * FROM DADOS_EMPRESAS WHERE ID = {inp_ID} AND TIPO = '{inp_tipo}' "
     cursor.execute(comando)
     dados = cursor.fetchall()
@@ -37,14 +37,14 @@ def selecao(inp_ID, inp_tipo): # {=========Leitura Grupo, SIte, BOF e ID(FRAME 1
     
 def tabela(int_arquivo): # {=========Informações da tabela(FRAME 2)=========}
     global registro_foto
-    
-    conn, cursor = fun.CONECTA_BD(r"C:\Users\20221CECA0402\Documents\Projeto_WRL\BD_WRL\REGISTROS_WRL.db")
+    print('\narquivo =',int_arquivo )
+    conn, cursor = fun.CONECTA_BD(r"C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\REGISTROS_WRL.db")
     comando = f"SELECT * FROM B6 WHERE ARQUIVO = '{int_arquivo}' "
     cursor.execute(comando)
     dados2 = cursor.fetchone()
     fun.DESCONECTA_BD(conn)
     
-    registro_foto = dados2[6]
+    registro_foto = int_arquivo
     
     return dados2
     
@@ -52,13 +52,13 @@ def tabela(int_arquivo): # {=========Informações da tabela(FRAME 2)=========}
 
 def imagens(registro_foto):  # {=========Informações para imagens(FRAME 2)=========}
     
-    endereco_pastafotos = fr"{pasta}\Projeto_WRL\Aplicativo_WRL\fotos_app"
-    endereco_pastaguias = fr"{pasta}\Projeto_WRL\Aplicativo_WRL\guias"
-    local_image = '\\'+ registro_foto
+    endereco_pastafotos = r"C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\fotos_app"
+    endereco_pastaguias = r"C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\guias"
+    # local_image = '\\'+ registro_foto
     #local_image = '\\'+ dados2[0][2] #+'.png'   (esta linha caso for usar '.fetchall' no 'def tabela' assim fazendo uma tupla e não uma lista)
         
-    arquivofoto = endereco_pastafotos +'\\' +local_image
-    arquivoguia = endereco_pastaguias +'\\' +local_image
+    arquivofoto = endereco_pastafotos +'\\' +registro_foto
+    arquivoguia = endereco_pastaguias +'\\' +registro_foto
     return arquivofoto, arquivoguia
 
 def tela(inp_janela): # {=======================Configuração de tela=========================}
@@ -164,10 +164,10 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo):
     
     
     dados2 = tabela(int_arquivo)
-    
-    data_foto = dados2[7]
-    hora_foto = dados2[8]
-    medidas_foto = dados2[9:]
+    vida = dados2[1]
+    data_foto = dados2[5]
+    hora_foto = dados2[6]
+    medidas_foto = dados2[7:]
    
     # {=======================Data=========================}
     ID_pg1 = tk.Label(frame_1,
@@ -215,13 +215,15 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo):
     tabela_pg1.column("#1", width=180)
     tabela_pg1.column("#2", width=200)
     
-    cont = 0
+    cont = int(BOF) + 1
+    cont2 = 1
+    
     for dado in medidas_foto:
-        if cont == 0:
+        if cont2 == cont:
             tabela_pg1.insert("", tk.END, values=('Bico', dado))
         else:
-            tabela_pg1.insert("", tk.END, values=(f'Furo {cont}', dado))
-        cont += 1
+            tabela_pg1.insert("", tk.END, values=(f'Furo {cont2}', dado))
+        cont2 += 1
                 
     tabela_pg1.place(relx=0.45, rely=0.15, relwidth=0.5, relheight=0.7)
 
@@ -258,7 +260,9 @@ def componentes_frame2(): # {=========Componentes da direita=========}
     #                             bg = '#B4EEB4',
     #                             fg = "#2F4F4F")
     # furos_pg1.place(relx=0.32, rely=0.03)
-    arquivofoto, arquivoguia = imagens()
+    arquivofoto, arquivoguia = imagens(registro_foto)
+    
+    print('\nArquivo_foto=',arquivofoto,'\narquivo guia = ', arquivoguia)
     # {=======================Imagem 1=========================}
     img1_pg1 = tk.PhotoImage(file = arquivofoto)
     img1_pg1 = img1_pg1.subsample(2, 2)

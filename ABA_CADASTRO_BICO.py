@@ -4,10 +4,9 @@ import tkinter as tk
 import colorama as color
 from customtkinter import *
 # from PIL import Image, ImageTk
-
 import FUNCOES_APK as fun
 
-caminho = r"C:\Users\20221CECA0402\Documents\Projeto_WRL\Aplicativo_WRL\REGISTROS_WRL.db"
+caminho = r"C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\REGISTROS_WRL.db"
 
 def USINAS():
     conn, cursor = fun.CONECTA_BD(caminho)

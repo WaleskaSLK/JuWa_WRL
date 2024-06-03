@@ -104,9 +104,11 @@ import FUNCOES_APK as fun
     
 # open()
 
-lista = [('USIMINAS/ES/BRASIL', 'Ipatinga 1', 6, '40/8', 1)]
-listac = [item for sublist in lista for item in sublist]
-listab = list(lista[0])
-listab = listab[0]
-lista_grupo = listab.split('/')
-print(listac)
+caminho = r"C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\REGISTROS_WRL.db"
+conn, cursor = fun.CONECTA_BD(caminho)
+comando = f"SELECT Grupo FROM DADOS_EMPRESAS "
+cursor.execute(comando)
+dados_banco = cursor.fetchall()
+fun.DESCONECTA_BD(conn)
+
+print(dados_banco)

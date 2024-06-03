@@ -140,7 +140,7 @@ def componentes_frame2(inp_frame):
         exibir_video()
     except:
         print('CAMERA DESCONECTADA') #não esta exibindo a imagem que eu queria, mas ao menos da pra testar outras funcionalidades que não estejam envolvidas diretamente com a camera
-        img = Image.open(r'C:\Users\20221CECA0402\Documents\Projeto_WRL\Aplicativo_WRL\arquivos\molde.png')
+        #img = Image.open(r'C:\Users\20221CECA0402\Documents\Projeto_WRL\Aplicativo_WRL\arquivos\molde.png')
         altura = borda.winfo_height() #atualiza altura e largura da borda para que a imagem da camera sempre preencha o espaço
         largura = borda.winfo_width()
         img = img.resize((largura, altura))  # Redimensiona a imagem para o tamanho da borda

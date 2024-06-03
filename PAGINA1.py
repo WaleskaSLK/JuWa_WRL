@@ -6,7 +6,6 @@ from customtkinter import *
 from PIL import Image, ImageTk
 # from APK2 import aba_camera
 import FUNCOES_APK as fun
-
 from ABA_CADASTRO_CAMERA import aba_cadastro
 from ABA_CADASTRO_BICO import aba_cadastro_bico
 
@@ -71,7 +70,7 @@ class APK():
         bt_fechar_aba_menu.place(relx=0.96, rely=0.02, relwidth=0.03, relheight=0.04)
         
         # {=======================Imagem IFES=========================}
-        self.img1_pg1 = tk.PhotoImage(file = r'C:\Users\20221CECA0402\Documents\Projeto_WRL\Aplicativo_WRL\ifes.png')
+        self.img1_pg1 = tk.PhotoImage(file = r'C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\ifes.png')
         self.img1_pg1 = self.img1_pg1.subsample(5, 5)
 
         self.fotoimg1_pg1 = tk.Label(self.frame_1,

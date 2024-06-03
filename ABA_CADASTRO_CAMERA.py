@@ -9,7 +9,7 @@ import FUNCOES_APK as fun
 from APP2 import aba_camera
 
 def USINAS():
-    caminho = r"C:\Users\20221CECA0402\Documents\Projeto_WRL\BD_WRL\REGISTROS_WRL.db"
+    caminho = r"C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\REGISTROS_WRL.db"
     conn, cursor = fun.CONECTA_BD(caminho)
     comando = f"SELECT Grupo FROM DADOS_EMPRESAS "
     cursor.execute(comando)
@@ -20,7 +20,7 @@ def USINAS():
     return dados_filtrados
 
 def USINA_SITE(usina):
-    caminho = r"C:\Users\20221CECA0402\Documents\Projeto_WRL\BD_WRL\REGISTROS_WRL.db"
+    caminho = r"C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\REGISTROS_WRL.db"
     conn, cursor = fun.CONECTA_BD(caminho)
     comando = f"SELECT Site FROM DADOS_EMPRESAS WHERE Grupo = ?"
     cursor.execute(comando, (usina,))
@@ -31,7 +31,7 @@ def USINA_SITE(usina):
     return dados_filtrados
 
 def SITE():
-    caminho = r"C:\Users\20221CECA0402\Documents\Projeto_WRL\BD_WRL\REGISTROS_WRL.db"
+    caminho = r"C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\REGISTROS_WRL.db"
     conn, cursor = fun.CONECTA_BD(caminho)
     comando = f"SELECT Site FROM DADOS_EMPRESAS "
     cursor.execute(comando)
@@ -42,7 +42,7 @@ def SITE():
     return dados_filtrados
 
 def FUROS_ID():
-    caminho = r"C:\Users\20221CECA0402\Documents\Projeto_WRL\BD_WRL\REGISTROS_WRL.db"
+    caminho = r"C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\REGISTROS_WRL.db"
     
     conn, cursor = fun.CONECTA_BD(caminho)
     ID = f"SELECT ID FROM DADOS_EMPRESAS "
@@ -58,7 +58,7 @@ def FUROS_ID():
     return dados_filtrados
 
 def TIPO():
-    caminho = r"C:\Users\20221CECA0402\Documents\Projeto_WRL\BD_WRL\REGISTROS_WRL.db"
+    caminho = r"C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\REGISTROS_WRL.db"
     conn, cursor = fun.CONECTA_BD(caminho)
     comando = f"SELECT TIPO FROM DADOS_EMPRESAS "
     cursor.execute(comando)
@@ -91,9 +91,9 @@ def voltar(aba_1, aba_2):
     aba_1.deiconify()  # Exiba a janela da aba 1
     aba_2.destroy()  # Destrua a janela da aba 2
     
-def comandos_botao_continuar(inp_janela,inp_usina_grupo, inp_site, inp_furos_ID, inp_tipo, inp_vida, inp_nome):
+def comandos_botao_continuar(inp_janela,menu_inicial,inp_usina_grupo, inp_site, inp_furos_ID, inp_tipo, inp_vida, inp_nome):
     dados = adquirir_dados(inp_usina_grupo, inp_site, inp_furos_ID, inp_tipo, inp_vida, inp_nome)
-    janela_cadastro = aba_camera(inp_janela, dados)
+    janela_cadastro = aba_camera(inp_janela, dados,menu_inicial)
     janela_cadastro.deiconify()
     
     
@@ -125,7 +125,7 @@ def botao_continuar_foto(inp_furos_ID, inp_tipo, inp_vida, inp_nome):
     Furos = str_furos_ID[0]
     ID = str_furos_ID[1]
     
-    caminho = r"C:\Users\20221CECA0402\Documents\Projeto_WRL\BD_WRL\REGISTROS_WRL.db"
+    caminho = r"C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\REGISTROS_WRL.db"
     conn, cursor = fun.CONECTA_BD(caminho)
     
     tabela = 'B' + Furos 
@@ -249,7 +249,7 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
     bt_voltar.place(relx=0.05, rely=0.88, relwidth=0.2, relheight=0.08)
     # inp_janela.withdraw()
 
-    bt_continuar = fun.CRIAR_BOTAO(inp_frame, "CONTINUAR",'#258D19', 'white',3,'20','',"hand2",lambda: comandos_botao_continuar(inp_janela,Var_Usina,Var_site,Var_IDTipo,Var_tipo,input_vida,input_usuario))
+    bt_continuar = fun.CRIAR_BOTAO(inp_frame, "CONTINUAR",'#258D19', 'white',3,'20','',"hand2",lambda: comandos_botao_continuar(inp_janela,inp_menu,Var_Usina,Var_site,Var_IDTipo,Var_tipo,input_vida,input_usuario))
     bt_continuar.place(relx=0.75, rely=0.88, relwidth=0.2, relheight=0.08)
     
     # {=======================FECHAR ABA=========================}

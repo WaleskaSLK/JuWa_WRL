@@ -7,7 +7,7 @@ import os
 import pandas as pd
 import math
 from tkinter.constants import *
-from tkinter import ttk
+from tkinter import ttk,messagebox
 from tkinter import messagebox
 from customtkinter import *
 from PIL import Image, ImageTk
@@ -27,7 +27,7 @@ from APK import aba_dados
 2) No arquivo FUNCOES.py tem diretórios declarados, como o caminho das imagens, fique atento em alterar esses trechos de acordo com a sua máquina;
 '''
 
-model = YOLO(r'C:\Users\20221CECA0402\Documents\Projeto_WRL\Aplicativo_WRL\arquivos\best.pt')
+model = YOLO(r'C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\weights\best.pt')
 
 # Define the DepthCamera class
 class DepthCamera:
@@ -98,13 +98,13 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     btfoto_pg2.place(relx=0.5, rely=0.93, anchor=CENTER)
 
 def componentes_frame2(inp_frame, lista):
-    global lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, stop
+    global lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, stop, nome_arquivo_APP
 
     borda = tk.Label(inp_frame, bg="black")
     borda.place(relx=0, rely=0, relwidth=1, relheight=1)
 
     def exibir_video():
-        global lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, stop, lista_APP, qtd_furos, Abertura, infra_image
+        global lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, stop, lista_APP, qtd_furos, Abertura, infra_image, id_bico
         ret, color_frame, infra_image, Abertura, depth_frame = dc.get_frame()
         lista_APP, id_bico, qtd_furos = f.organizar_dados_app(lista)
 
@@ -121,15 +121,17 @@ def componentes_frame2(inp_frame, lista):
             if keyboard.is_pressed('ctrl') or keyboard.is_pressed('right control') or keyboard.is_pressed('q'):
                 lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW = f.tirar_foto(color_frame, infra_image, id_bico)
                 stop = True
-                return
+                return 
 
         if not stop:
             borda.after(10, exibir_video)
 
     exibir_video()
 
-def aba_camera(inp_janela,dados):
-    global lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, stop, lista_APP, qtd_furos, Abertura, infra_image
+    return 
+
+def aba_camera(inp_janela,dados,menu_inicial):
+    global lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, stop, lista_APP, qtd_furos, Abertura, infra_image, id_bico
     print('aaaaaaa',dados)
     lista_wl = dados
     # lista_wl = ['MINERADORA/BH/BRASIL', 'Bloco 2', '6', '5', '30/5', '81', 'JOICE']
@@ -158,19 +160,19 @@ def aba_camera(inp_janela,dados):
     lista_dh = f.extrair_data_e_hora(lista_arq[0])
     lista_diametros, img_segmentada, mascaras, resultados, foto_original = f.analisar_imagem(model, cv2.imread(caminhoBW), nome_arquivo_BW, Depth_Frame, Abertura)
     caixas_detectadas, nomes_classes, propriedades = f.extrair_dados(resultados, mascaras, nome_arquivo_BW)
-    img_identificada = f.identificar_furos(caixas_detectadas, nomes_classes, foto_original, infra_image)
+    img_identificada = f.identificar_furos(caixas_detectadas, nomes_classes, foto_original, infra_image, lista_arq[0])
 
     for dado in lista_dh:
         lista_arq.append(dado)
 
     lista_completa = f.reunir_dados(lista_APP, lista_arq, lista_diametros)
     f.salvar_registros(lista_completa, qtd_furos)
-    # f.exibir_imagens(cv2.imread(caminhoAPP), img_segmentada, img_identificada)
+
     
-    
-    
-    janela_cadastro = aba_dados(inp_janela, dados[3], dados[4], nome_arquivo_BW )
-    janela_cadastro.deiconify()
+    # janela_cadastro = aba_dados(inp_janela, dados[3], dados[4], nome_arquivo_BW )
+    messagebox.showinfo('AVISO',"Imagem salva")
+    menu_inicial.deiconify()
+    janela_tres.destroy
     
     return janela_tres
 
