@@ -4,9 +4,10 @@ import tkinter as tk
 import colorama as color
 from customtkinter import *
 # from PIL import Image, ImageTk
+
 import FUNCOES_APK as fun
 
-caminho = r"C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\REGISTROS_WRL.db"
+caminho = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db"
 
 def USINAS():
     conn, cursor = fun.CONECTA_BD(caminho)
@@ -53,7 +54,7 @@ def voltar(aba_1, aba_2):
     aba_2.destroy()  # Destrua a janela da aba 2
     
 def tela(inp_janela):
-    inp_janela.title("Where Register Lances (WRL)")
+    inp_janela.title("CADASTRAR BICO")
     inp_janela.configure(background= '#9BCD9B')
     inp_janela.geometry("1280x800")
     inp_janela.resizable(False, False) #se quiser impedir que amplie ou diminua a tela, altere para False

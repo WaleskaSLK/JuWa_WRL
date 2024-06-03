@@ -12,7 +12,7 @@ Grupo, SIte e BOF. Sendo assim, nesta aba, o Grupo, site e bof estão com seu ID
 Registros estarão vindo do banco de dados.
 """
 
-# pasta = r'C:\Users\20221CECA0402\Documents'
+pasta = r'C:\Users\labga\OneDrive\Documentos'
 # {=======================Comando para o Banco de Dados=========================}
 
 def selecao(inp_ID, inp_tipo): # {=========Leitura Grupo, SIte, BOF e ID(FRAME 1)=========}
@@ -21,7 +21,7 @@ def selecao(inp_ID, inp_tipo): # {=========Leitura Grupo, SIte, BOF e ID(FRAME 1
     inp_ID = int(inp_ID)
     ID = inp_ID
     
-    conn, cursor = fun.CONECTA_BD(r"C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\REGISTROS_WRL.db")
+    conn, cursor = fun.CONECTA_BD(r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db")
     comando = f"SELECT * FROM DADOS_EMPRESAS WHERE ID = {inp_ID} AND TIPO = '{inp_tipo}' "
     cursor.execute(comando)
     dados = cursor.fetchall()
@@ -38,12 +38,12 @@ def selecao(inp_ID, inp_tipo): # {=========Leitura Grupo, SIte, BOF e ID(FRAME 1
 def tabela(int_arquivo): # {=========Informações da tabela(FRAME 2)=========}
     global registro_foto
     print('\narquivo =',int_arquivo )
-    conn, cursor = fun.CONECTA_BD(r"C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\REGISTROS_WRL.db")
+    conn, cursor = fun.CONECTA_BD(r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db")
     comando = f"SELECT * FROM B6 WHERE ARQUIVO = '{int_arquivo}' "
     cursor.execute(comando)
     dados2 = cursor.fetchone()
     fun.DESCONECTA_BD(conn)
-    
+    print('dados2 = ', dados2)
     registro_foto = int_arquivo
     
     return dados2
@@ -52,8 +52,8 @@ def tabela(int_arquivo): # {=========Informações da tabela(FRAME 2)=========}
 
 def imagens(registro_foto):  # {=========Informações para imagens(FRAME 2)=========}
     
-    endereco_pastafotos = r"C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\fotos_app"
-    endereco_pastaguias = r"C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\guias"
+    endereco_pastafotos = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_ANALISE"
+    endereco_pastaguias = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_SEGMENTADA"
     # local_image = '\\'+ registro_foto
     #local_image = '\\'+ dados2[0][2] #+'.png'   (esta linha caso for usar '.fetchall' no 'def tabela' assim fazendo uma tupla e não uma lista)
         
@@ -62,7 +62,7 @@ def imagens(registro_foto):  # {=========Informações para imagens(FRAME 2)====
     return arquivofoto, arquivoguia
 
 def tela(inp_janela): # {=======================Configuração de tela=========================}
-    inp_janela.title("Where Register Lances (WRL)")
+    inp_janela.title("DADOS DA INSPECÇÃO")
     inp_janela.configure(background= '#9BCD9B')
     inp_janela.geometry("1280x700")
     inp_janela.resizable(True, True) #se quiser impedir que amplie ou diminua a tela, altere para False
@@ -84,6 +84,8 @@ def frames_da_tela(inp_janela):
                             highlightbackground= '#668B8B', 
                             highlightthickness=1)
     frame_2.place(relx=0.01, rely=0.02,relwidth=0.38, relheight=0.96)
+    
+    return frame_1, frame_2
 
 def componentes_frame1(inp_ID, inp_tipo, int_arquivo):
     dados, lista_grupo = selecao(inp_ID,inp_tipo)
@@ -252,27 +254,27 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo):
     btContinuar_pg1.place(relx=0.55, rely=0.9, relwidth=0.12, relheight=0.08)
 
 
-def componentes_frame2(): # {=========Componentes da direita=========}
-    #  # {=======================Título=========================}
-    # furos_pg1 = tk.Label(frame_2,
-    #                             text = ID,
-    #                             font = ('verdana', '23'),
-    #                             bg = '#B4EEB4',
-    #                             fg = "#2F4F4F")
-    # furos_pg1.place(relx=0.32, rely=0.03)
-    arquivofoto, arquivoguia = imagens(registro_foto)
+def componentes_frame2(inp_janela): # {=========Componentes da direita=========}
+     # {=======================Título=========================}
+    furos_pg1 = tk.Label(frame_2,
+                                text = 'funcionaa',
+                                font = ('verdana', '23'),
+                                bg = '#B4EEB4',
+                                fg = "#2F4F4F")
+    furos_pg1.place(relx=0.32, rely=0.03)
     
+    arquivofoto, arquivoguia = imagens(registro_foto)
     print('\nArquivo_foto=',arquivofoto,'\narquivo guia = ', arquivoguia)
     # {=======================Imagem 1=========================}
     img1_pg1 = tk.PhotoImage(file = arquivofoto)
+    print(img1_pg1)
     img1_pg1 = img1_pg1.subsample(2, 2)
-
+    print(img1_pg1)
     fotoimg1_pg1 = tk.Label(frame_2,
                                     bg= '#B4EEB4',
                                     bd =0,
                                     image = img1_pg1)
     fotoimg1_pg1.place(relx=0.5, rely=0.25, anchor=CENTER)
-    
 
     # {=======================Imagem 2=========================}
     img2_pg1 = tk.PhotoImage(file = arquivoguia)
@@ -286,20 +288,22 @@ def componentes_frame2(): # {=========Componentes da direita=========}
 
     # {=======================WRL=========================}
     titulo2_pg1 = tk.Label(frame_2,
-                                text="Where Register Lances(WRL)",
+                                text="foi",
                                 font=('italic', '18'),
                                 bg= '#B4EEB4',
                                 fg="#2F4F4F")
     titulo2_pg1.place(relx=0.01, rely=0.94)
+    
+    inp_janela.mainloop()
 
 def aba_dados(inp_janela,inp_ID,inp_tipo, int_arquivo):
     # janela = tk.Tk()
     janela = tk.Toplevel(inp_janela)
     
-    tela(inp_janela)
-    frames_da_tela(inp_janela)
+    tela(janela)
+    frames_da_tela(janela)
     componentes_frame1(inp_ID, inp_tipo, int_arquivo)
-    componentes_frame2()
+    componentes_frame2(janela)
     
     janela.transient(inp_janela) #TOPLEVEL
     janela.focus_force() #TOPLEVEL

@@ -1,8 +1,11 @@
-# import sqlite3 as sql
-# import pandas as pd
+from tkinter import ttk, CENTER
+import tkinter as tk
+import sqlite3 as sql
+import colorama as color
+import customtkinter
+from PIL import Image, ImageTk
 import FUNCOES_APK as fun
-# banco = sql.connect(r'C:\Users\20221CECA0402\Documents\Projeto_WRL\REGISTROS_WRL.db')
-# cursor = banco.cursor()
+
 
 
 # # try:
@@ -104,11 +107,54 @@ import FUNCOES_APK as fun
     
 # open()
 
-caminho = r"C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\REGISTROS_WRL.db"
-conn, cursor = fun.CONECTA_BD(caminho)
-comando = f"SELECT Grupo FROM DADOS_EMPRESAS "
-cursor.execute(comando)
-dados_banco = cursor.fetchall()
-fun.DESCONECTA_BD(conn)
+inp_janela = tk.Tk()
 
-print(dados_banco)
+inp_janela.title("testando")
+inp_janela.configure(background= '#9BCD9B')
+inp_janela.geometry("1280x700")
+inp_janela.resizable(True, True) #se quiser impedir que amplie ou diminua a tela, altere para False
+# inp_janela.maxsize(width=1920, height=1080) #limite máximo da tela
+inp_janela.minsize(width=700, height=450) #limite minimo da tela
+    
+frame_2 = tk.Frame(inp_janela, bd=2,
+                    bg= '#B4EEB4',
+                    highlightbackground= '#668B8B', 
+                    highlightthickness=1)
+frame_2.place(relx=0.01, rely=0.02,relwidth=0.38, relheight=0.96)
+
+arquivofoto = r'C:\Users\20221CECA0402\Documents\Projeto_WRL\Aplicativo_WRL\fotos_BW\registro_001_03-06-2024_13.01.png'
+
+img1_pg1 = tk.PhotoImage(file = arquivofoto)
+img1_pg1 = img1_pg1.subsample(2, 2)
+
+fotoimg1_pg1 = tk.Label(frame_2,
+                                bg= '#B4EEB4',
+                                bd =0,
+                                image = img1_pg1)
+fotoimg1_pg1.place(relx=0.5, rely=0.25, anchor=CENTER)
+    
+# arquivofoto= r'C:\Users\20221CECA0402\Documents\Projeto_WRL\Aplicativo_WRL\fotos_BW\registro_001_29-05-2024_18.58.png'
+
+# img1_pg1 = tk.PhotoImage(file = arquivofoto)
+# img1_pg1 = img1_pg1.subsample(2, 2)
+
+# fotoimg1_pg1 = tk.Label(frame_2,
+#                                 bg= '#B4EEB4',
+#                                 bd =0,
+#                                 image = img1_pg1)
+# fotoimg1_pg1.place(relx=0.5, rely=0.25, anchor=CENTER)
+
+# arquivoguia =r'C:\Users\20221CECA0402\Documents\Projeto_WRL\Aplicativo_WRL\fotos_segmentada\registro_001_29-05-2024_18.57.png'
+# img2_pg1 = tk.PhotoImage(file = arquivoguia)
+# img2_pg1 = img2_pg1.subsample(2, 2)
+
+# fotoimg2_pg1 = tk.Label(frame_2,
+#                             bg= '#B4EEB4',
+#                             bd =0,
+#                             image = img2_pg1)
+# fotoimg2_pg1.place(relx=0.5, rely=0.7, anchor=CENTER)
+
+inp_janela.mainloop()
+
+
+

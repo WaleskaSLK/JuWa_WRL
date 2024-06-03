@@ -1,11 +1,12 @@
 import tkinter as tk
 import sqlite3 as sql
 import colorama as color
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from customtkinter import *
 from PIL import Image, ImageTk
 # from APK2 import aba_camera
 import FUNCOES_APK as fun
+
 from ABA_CADASTRO_CAMERA import aba_cadastro
 from ABA_CADASTRO_BICO import aba_cadastro_bico
 
@@ -20,7 +21,7 @@ class APK():
         self.janela_menu.mainloop()
     
     def tela(self): # {=======================Configuração de tela=========================}
-        self.janela_menu.title("Where Register Lances (WRL)")
+        self.janela_menu.title("MENU - Where Register Lances (WRL)")
         self.janela_menu.configure(background= '#9BCD9B')
         self.janela_menu.attributes("-fullscreen", True)
         self.janela_menu.overrideredirect(True)
@@ -64,13 +65,13 @@ class APK():
         # {=======================Botão Iniciar Inspeção=========================}
         self.bt_iniciar_camera = fun.CRIAR_BOTAO(self.frame_1,'Iniciar Inspeção','#71C55B','#005200',4,'32','bold',"circle", self.INICIAR_INSPECAO)
         self.bt_iniciar_camera.place(relx=0.5, rely=0.56, relwidth=0.4, relheight=0.35)
-
+        
         # {=======================FECHAR ABA=========================}
         bt_fechar_aba_menu = tk.Button(self.frame_1, text="X", command=self.janela_menu.destroy, bg="red")
         bt_fechar_aba_menu.place(relx=0.96, rely=0.02, relwidth=0.03, relheight=0.04)
         
         # {=======================Imagem IFES=========================}
-        self.img1_pg1 = tk.PhotoImage(file = r'C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\ifes.png')
+        self.img1_pg1 = tk.PhotoImage(file = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\ifes.png')
         self.img1_pg1 = self.img1_pg1.subsample(5, 5)
 
         self.fotoimg1_pg1 = tk.Label(self.frame_1,

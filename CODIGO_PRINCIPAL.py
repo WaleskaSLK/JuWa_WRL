@@ -17,7 +17,7 @@ import FUNCOES as f
 import APP2 as a
 
 # Carregando modelo da YOLOv8
-model = YOLO(r'C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\weights\best.pt')
+model = YOLO(r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\best.pt')
 pi_value = np.pi
 sqrt = np.sqrt
 
@@ -101,12 +101,12 @@ while True:
     data = datetime.now()
     lista_arq = []
     # Formatar a data e hora como parte do nome do arquivo
-    diretorio_destino_imgBW = r'C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\fotos_BW'
+    diretorio_destino_imgBW = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_ANALISE'
     nome_arquivo_BW = data.strftime(f'analise_{id_bico}_%d-%m-%Y_%H.%M') + '.png'
     caminho_completo_fotografia_BW = os.path.join(diretorio_destino_imgBW, nome_arquivo_BW)
     
     # Formatar a data e hora como parte do nome do arquivo
-    diretorio_destino_imgAPP = r'C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\fotos_app'
+    diretorio_destino_imgAPP = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_REGISTRO'
     nome_arquivo_APP = data.strftime(f'registro_{id_bico}_%d-%m-%Y_%H.%M') + '.png'
     caminho_completo_fotografia_APP = os.path.join(diretorio_destino_imgAPP, nome_arquivo_APP)
     lista_arq.append(nome_arquivo_APP)
