@@ -14,7 +14,7 @@ import keyboard
 import os
 from datetime import datetime
 import sqlite3 as sql
-
+from tkinter import  messagebox
 
 class DepthCamera:
 
@@ -37,9 +37,8 @@ class DepthCamera:
                 
             # Start streaming
             self.pipeline.start(config)
-
         except:
-            print("Câmera desconectada")
+            messagebox.showwarning("AVISO","CONECTA A CAMÊRA")
 
     def get_frame(self):      
         frames = self.pipeline.wait_for_frames(timeout_ms=2000)
@@ -112,12 +111,12 @@ def tirar_foto(color_frame, infra_image, id_bico):
     data = datetime.now()
     lista_arq = []
     # Formatar a data e hora como parte do nome do arquivo
-    diretorio_destino_imgBW = r'C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\fotos_BW'
+    diretorio_destino_imgBW = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_ANALISE'
     nome_arquivo_BW = data.strftime(f'registro_{id_bico}_%d-%m-%Y_%H.%M') + '.png'
     caminho_completo_fotografia_BW = os.path.join(diretorio_destino_imgBW, nome_arquivo_BW)
     
     # Formatar a data e hora como parte do nome do arquivo
-    diretorio_destino_imgAPP = r'C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\fotos_app'
+    diretorio_destino_imgAPP = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_REGISTRO'
     nome_arquivo_APP = data.strftime(f'registro_{id_bico}_%d-%m-%Y_%H.%M') + '.png'
     caminho_completo_fotografia_APP = os.path.join(diretorio_destino_imgAPP, nome_arquivo_APP)
     lista_arq.append(nome_arquivo_APP)
@@ -139,10 +138,15 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
     imagem_bgr = cv2.cvtColor(imagem, cv2.COLOR_RGB2BGR)  # Converter imagem para BGR
 
     # Análise
-    results = model(imagem_bgr,device = 'cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True, project =r"C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\resultados",name = nome, save_txt = True, show_boxes=False)
+    results = model(imagem_bgr,device = 'cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True, project =r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\resultados",name = nome, save_txt = True, show_boxes=False)
     
     for result in results:
         img_segmentada = results[0].plot(masks= True, boxes=False) #plotar a segmentação - *resultados_array_bgr
+        
+        diretorio_destino_imgAPP = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_SEGMENTADA'
+        caminho_completo_fotografia_segmentada = os.path.join(diretorio_destino_imgAPP, nome)
+        cv2.imwrite(caminho_completo_fotografia_segmentada, img_segmentada)
+        
         
         mascaras = result.masks.data # Máscaras extraídas - extracted_masks
         depth_data_numpy_binaria = mascaras.cpu().numpy()   #tranformar array em np.array
@@ -178,7 +182,6 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
                 depth_data_numpy_binaria[j][x][y] = ((math.tan(float(Abertura)*180/math.pi)*v*2)/640)
     
         lista_diametros = []
-        lista_furos= []
         # Exibir os diametros
         area_total = np.sum(depth_data_numpy_binaria)
         diametro_externo = 2*(math.sqrt(area_total/math.pi))
@@ -245,7 +248,7 @@ def extrair_dados(resultado, mascaras, nome):
 
     return caixas_detectadas, nomes_classes, lista_proprs
 
-def identificar_furos(caixas_detectadas, nomes_classes, imagem, frame, nome_arquivo_APP):
+def identificar_furos(caixas_detectadas, nomes_classes, imagem, frame):
     # Extrair as coordenadas e centro das caixas delimitadoras
     coordenadas_caixas = []
     pontos = []
@@ -270,10 +273,10 @@ def identificar_furos(caixas_detectadas, nomes_classes, imagem, frame, nome_arqu
     for i in range(1, len(pontos)):
         imagem_final = cv2.putText(img, f'{i}', pontos[i], cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 1)
 
-    #id = str(id_bico)
-    #data = datetime.now()
-    diretorio_guias = r'C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\guias'
-    caminho = os.path.join(diretorio_guias, nome_arquivo_APP)
+    data = datetime.now()
+    diretorio_guias = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_GUIA'
+    nome_arquivo = data.strftime('registro_%d-%m-%Y_%H.%M') + '.png'
+    caminho = os.path.join(diretorio_guias, nome_arquivo)
     
     cv2.imwrite(caminho, imagem_final)
 
@@ -313,7 +316,7 @@ def reunir_dados(dados_app, dados_arquivo, dados_diametros):
     # Inserir os dados vindos do app
     for dado in dados_app:
         lista_completa.append(dado)
-    # Inserir os dados do arquivo
+    # Inserir os dados vindos do app
     for dado in dados_arquivo:
         lista_completa.append(dado)
     # Inserir os dados dos diametros
@@ -333,7 +336,7 @@ def organizar_dados_app(lista):
 
 def salvar_registros(lista, x):
     # Conectando ao banco 
-    banco = sql.connect(r'C:\Users\labga\OneDrive\Documentos\IC_Julia\PROJETO_IC_IFES_BICO_DE_LANCA\GitHub_com_Waleska\JuWa_WRL\REGISTROS_WRL.db') #mudar dps
+    banco = sql.connect(r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db') #mudar dps
     cursor = banco.cursor()
 
     if x == 6:
